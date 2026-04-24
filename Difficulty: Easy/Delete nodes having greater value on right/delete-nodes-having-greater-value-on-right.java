@@ -9,33 +9,29 @@ class Node {
 }
 */
 class Solution {
-    Node rev(Node head){
-        Node curr = head;
-        Node prev = null;
-        while(curr!=null){
-            Node nex = curr.next;
-            curr.next = prev;
-            prev = curr;
-            curr = nex;
-        }
-        return prev;
-    }
     Node compute(Node head) {
         // your code here
         if(head.next == null) return head;
-        Node h = rev(head);
-        Node curr = h;
-        Node pr = h.next;
-        while(pr!=null){
-            if(pr.data<curr.data){
-                pr = pr.next;
-            }else{
-                curr.next = pr;
-                curr = curr.next;
-                pr = pr.next;
+        Stack<Integer> s = new Stack<>();
+        Node curr = head;
+        while(curr!=null){
+            if(s.isEmpty()) s.push(curr.data);
+            else{
+                while(curr.data>s.peek()){
+                    s.pop();
+                    if(s.isEmpty()) break;
+                }
+                s.push(curr.data);
             }
+            curr = curr.next;
         }
-        curr.next = null;
-        return rev(h);
+        Node d = new Node(s.pop());
+        Node t = d;
+        while(!s.isEmpty()){
+            Node n = new Node(s.pop());
+            n.next = t;
+            t = n;
+        }
+        return t;
     }
 }
